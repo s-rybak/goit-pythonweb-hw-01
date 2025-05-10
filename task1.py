@@ -1,4 +1,10 @@
 from abc import ABC, abstractmethod
+import logging
+
+logging.basicConfig(
+    format="%(asctime)s %(message)s",
+    level=logging.INFO,
+)
 
 
 class Vehicle(ABC):
@@ -13,45 +19,45 @@ class VehicleFactory:
     """Vehicle factory interface"""
 
     @abstractmethod
-    def create_car(self):
+    def create_car(self) -> Vehicle:
         pass
 
     @abstractmethod
-    def create_motorcycle(self):
+    def create_motorcycle(self) -> Vehicle:
         pass
 
 
 class Car(Vehicle):
-    def __init__(self, make, model):
+    def __init__(self, make: str, model: str):
         self.make = make
         self.model = model
 
     def start_engine(self):
-        print(f"{self.make} {self.model}: Двигун запущено")
+        logging.info(f"{self.make} {self.model}: Двигун запущено")
 
 
 class Motorcycle(Vehicle):
-    def __init__(self, make, model):
+    def __init__(self, make: str, model: str):
         self.make = make
         self.model = model
 
     def start_engine(self):
-        print(f"{self.make} {self.model}: Мотор заведено")
+        logging.info(f"{self.make} {self.model}: Мотор заведено")
 
 
 class USVehicleFactory(VehicleFactory):
-    def create_car(self):
+    def create_car(self) -> Vehicle:
         return Car("Ford", "Mustang (US Spec)")
 
-    def create_motorcycle(self):
+    def create_motorcycle(self) -> Vehicle:
         return Motorcycle("Harley-Davidson", "Sportster (US Spec)")
 
 
 class EUVehicleFactory(VehicleFactory):
-    def create_car(self):
+    def create_car(self) -> Vehicle:
         return Car("Ford", "Mustang (EU Spec)")
 
-    def create_motorcycle(self):
+    def create_motorcycle(self) -> Vehicle:
         return Motorcycle("Harley-Davidson", "Sportster (EU Spec)")
 
 

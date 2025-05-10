@@ -1,6 +1,12 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 import uuid
+import logging
+
+logging.basicConfig(
+    format="%(asctime)s %(message)s",
+    level=logging.INFO,
+)
 
 
 @dataclass
@@ -11,12 +17,6 @@ class Book:
     title: str
     author: str
     year: int
-
-    def __init__(self, id, title, author, year):
-        self.id = id
-        self.title = title
-        self.author = author
-        self.year = year
 
 
 class LibraryInterface(ABC):
@@ -57,17 +57,19 @@ class Library(LibraryInterface):
 
     def add_book(self, book: Book):
         if book.id in self.books:
-            raise ValueError("Book already exists")
+            logging.error("Book already exists")
+            return
         self.books[book.id] = book
 
     def remove_book(self, id: str):
         if id not in self.books:
-            raise ValueError("Book not found")
+            logging.error("Book not found")
+            return
         del self.books[id]
 
     def show_books(self):
         for book in self.books.values():
-            print(
+            logging.info(
                 f"Title: {book.title}, Author: {book.author}, Year: {book.year} (ID: {book.id})"
             )
 
@@ -94,7 +96,7 @@ def main():
             case "exit":
                 break
             case _:
-                print("Invalid command. Please try again.")
+                logging.error("Invalid command. Please try again.")
 
 
 if __name__ == "__main__":
